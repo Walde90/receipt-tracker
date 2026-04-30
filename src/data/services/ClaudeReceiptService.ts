@@ -72,7 +72,13 @@ export class ClaudeReceiptService {
     }
 
     const data = await response.json();
-    const text: string = data.content[0].text;
+    const raw: string = data.content[0].text;
+
+    // Claude sometimes wraps JSON in markdown code fences despite instructions
+    const text = raw
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```\s*$/i, '')
+      .trim();
 
     try {
       return JSON.parse(text) as ParsedReceipt;
