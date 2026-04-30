@@ -5,28 +5,26 @@ const API_KEY = process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY ?? '';
 const API_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-haiku-4-5-20251001';
 
-const SYSTEM_PROMPT = `Du bist ein Spezialist für das Auslesen von Kassenzetteln.
-Antworte ausschließlich mit einem JSON-Objekt, ohne Markdown-Codeblöcke.
-Format:
-{
-  "storeName": "Name des Geschäfts",
-  "totalAmount": 0.00,
-  "items": [
-    {
-      "rawName": "Originaltext vom Bon",
-      "normalizedName": "Lesbarer Name",
-      "quantity": 1,
-      "unitPrice": 0.00,
-      "totalPrice": 0.00,
-      "isDiscount": false
-    }
-  ]
+const SYSTEM_PROMPT = [
+  'You are a receipt parsing specialist.',
+  'Respond ONLY with a valid JSON object. No markdown, no explanation, no code fences.',
+  'Required format:',
+  '{"storeName":"string","totalAmount":0.00,"items":[{"rawName":"string","normalizedName":"string","quantity":1,"unitPrice":0.00,"totalPrice":0.00,"isDiscount":false}]}',
+  'Rules:',
+  '- Ignore lines like tax, total, cash given, change, receipt number',
+  '- Discounts/deposits as separate items with isDiscount:true',
+  '- Extract quantity from "3x" or "3 Stk"',
+  '- normalizedName: readable name without size info like 500ml or 1kg',
+].join('\n');
+
+function extractJson(text: string): ParsedReceipt {
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error(`No JSON found in response: ${text.slice(0, 300)}`);
+  }
+  return JSON.parse(text.slice(start, end + 1)) as ParsedReceipt;
 }
-Regeln:
-- Ignoriere Zeilen wie MwSt, Summe, Gegeben, Rückgeld, Bon-Nr
-- Rabatte/Pfand als eigene Positionen mit isDiscount: true und negativem Preis
-- quantity aus "3x" oder "3 Stk" ableiten
-- normalizedName: lesbar, ohne Größenangaben wie "500ml" oder "1kg"`;
 
 export class ClaudeReceiptService {
   async parseReceiptImage(imageUri: string): Promise<ParsedReceipt> {
@@ -59,7 +57,7 @@ export class ClaudeReceiptService {
               },
               {
                 type: 'text',
-                text: 'Lies diesen Kassenzettel aus und gib die Daten als JSON zurück.',
+                text: 'Parse this receipt and return JSON only.',
               },
             ],
           },
@@ -68,22 +66,16 @@ export class ClaudeReceiptService {
     });
 
     if (!response.ok) {
-      throw new Error(`Claude API Fehler: ${response.status}`);
+      throw new Error(`Claude API error: ${response.status}`);
     }
 
     const data = await response.json();
     const raw: string = data.content[0].text;
 
-    // Claude sometimes wraps JSON in markdown code fences despite instructions
-    const text = raw
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/\s*```\s*$/i, '')
-      .trim();
-
     try {
-      return JSON.parse(text) as ParsedReceipt;
-    } catch {
-      throw new Error('Claude hat kein gültiges JSON zurückgegeben.');
+      return extractJson(raw);
+    } catch (e) {
+      throw new Error(e instanceof Error ? e.message : 'Failed to parse Claude response');
     }
   }
 }

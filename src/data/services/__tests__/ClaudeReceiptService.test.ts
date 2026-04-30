@@ -62,7 +62,7 @@ describe('ClaudeReceiptService', () => {
     mockFetch.mockReturnValueOnce(Promise.resolve({ ok: false, status: 401, json: jest.fn() }));
 
     await expect(service.parseReceiptImage('file://test.jpg')).rejects.toThrow(
-      'Claude API Fehler: 401'
+      'Claude API error: 401'
     );
   });
 
@@ -74,9 +74,7 @@ describe('ClaudeReceiptService', () => {
       })
     );
 
-    await expect(service.parseReceiptImage('file://test.jpg')).rejects.toThrow(
-      'Claude hat kein gültiges JSON zurückgegeben.'
-    );
+    await expect(service.parseReceiptImage('file://test.jpg')).rejects.toThrow('No JSON found');
   });
 
   it('sends the image as base64 in the request body', async () => {
