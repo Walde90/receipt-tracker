@@ -8,12 +8,23 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --passWithNoTests",
-    "test:ci": "jest --passWithNoTests --ci --coverage"
+    "test:ci": "jest --passWithNoTests --ci --coverage",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/"
   },
   "jest": {
     "testEnvironment": "node",
     "transform": {
-      "^.+\\.tsx?$": ["ts-jest", { "tsconfig": { "jsx": "react" } }]
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "jsx": "react"
+          }
+        }
+      ]
     },
     "testMatch": [
       "**/__tests__/**/*.test.ts",
@@ -23,7 +34,12 @@
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts"
     ],
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ]
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -53,9 +69,16 @@
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
     "drizzle-kit": "^0.31.10",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "jest": "^30.3.0",
     "jest-expo": "^55.0.16",
+    "prettier": "^3.8.3",
     "ts-jest": "^29.4.9",
     "typescript": "~5.9.2"
   },
