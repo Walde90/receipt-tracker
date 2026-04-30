@@ -12,11 +12,17 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { claudeReceiptService } from '../../../data/services/ClaudeReceiptService';
 import { ParsedReceipt, ParsedLineItem } from '../../../data/services/OcrParserService';
+import { CategoryPickerModal } from '../../components/shared/CategoryPickerModal';
+import { Category } from '../../../domain/entities/Category';
+
+type CategoryMap = Record<number, Category>;
 
 export function OcrScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [result, setResult] = useState<ParsedReceipt | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [categoryMap, setCategoryMap] = useState<CategoryMap>({});
+  const [pickerItemIndex, setPickerItemIndex] = useState<number | null>(null);
 
   const pickImage = async (fromCamera: boolean) => {
     const permission = fromCamera
@@ -37,6 +43,7 @@ export function OcrScreen() {
     const uri = pickerResult.assets[0].uri;
     setImageUri(uri);
     setResult(null);
+    setCategoryMap({});
     await analyze(uri);
   };
 
@@ -50,6 +57,10 @@ export function OcrScreen() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const assignCategory = (itemIndex: number, category: Category) => {
+    setCategoryMap((prev) => ({ ...prev, [itemIndex]: category }));
   };
 
   return (
@@ -79,7 +90,12 @@ export function OcrScreen() {
           <Text style={styles.storeName}>{result.storeName}</Text>
 
           {result.items.map((item, index) => (
-            <LineItemRow key={index} item={item} />
+            <LineItemRow
+              key={index}
+              item={item}
+              category={categoryMap[index] ?? null}
+              onCategoryPress={() => setPickerItemIndex(index)}
+            />
           ))}
 
           <View style={styles.totalRow}>
@@ -99,23 +115,46 @@ export function OcrScreen() {
           </Text>
         </View>
       )}
+
+      <CategoryPickerModal
+        visible={pickerItemIndex !== null}
+        selectedId={pickerItemIndex !== null ? (categoryMap[pickerItemIndex]?.id ?? null) : null}
+        onSelect={(cat) => {
+          if (pickerItemIndex !== null) assignCategory(pickerItemIndex, cat);
+        }}
+        onClose={() => setPickerItemIndex(null)}
+      />
     </ScrollView>
   );
 }
 
-function LineItemRow({ item }: { item: ParsedLineItem }) {
+function LineItemRow({
+  item,
+  category,
+  onCategoryPress,
+}: {
+  item: ParsedLineItem;
+  category: Category | null;
+  onCategoryPress: () => void;
+}) {
   return (
     <View style={[styles.itemRow, item.isDiscount && styles.itemRowDiscount]}>
       <View style={styles.itemLeft}>
-        <Text style={styles.itemName}>{item.normalizedName}</Text>
+        <Text style={styles.itemName}>{item.rawName}</Text>
         {item.quantity > 1 && (
           <Text style={styles.itemMeta}>
             {item.quantity}x à {item.unitPrice.toFixed(2).replace('.', ',')} €
           </Text>
         )}
+        <TouchableOpacity onPress={onCategoryPress} style={styles.categoryBtn}>
+          <Text style={[styles.categoryBtnText, category && styles.categoryBtnActive]}>
+            {category ? category.name : '+ Kategorie'}
+          </Text>
+        </TouchableOpacity>
       </View>
       <Text style={[styles.itemPrice, item.isDiscount && styles.discountPrice]}>
-        {item.isDiscount ? '-' : ''} {item.totalPrice.toFixed(2).replace('.', ',')} €
+        {item.isDiscount ? '- ' : ''}
+        {item.totalPrice.toFixed(2).replace('.', ',')} €
       </Text>
     </View>
   );
@@ -137,12 +176,7 @@ const styles = StyleSheet.create({
   },
   actionButtonIcon: { fontSize: 32 },
   actionButtonLabel: { fontSize: 14, fontWeight: '600', color: '#374151' },
-  preview: {
-    width: '100%',
-    height: 200,
-    borderRadius: 12,
-    backgroundColor: '#E5E7EB',
-  },
+  preview: { width: '100%', height: 200, borderRadius: 12, backgroundColor: '#E5E7EB' },
   loadingBox: { alignItems: 'center', padding: 32, gap: 12 },
   loadingText: { color: '#6B7280', fontSize: 14 },
   resultBox: {
@@ -162,17 +196,28 @@ const styles = StyleSheet.create({
   },
   itemRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#F3F4F6',
   },
   itemRowDiscount: { backgroundColor: '#FFF7ED' },
-  itemLeft: { flex: 1 },
+  itemLeft: { flex: 1, gap: 4 },
   itemName: { fontSize: 14, color: '#111827' },
-  itemMeta: { fontSize: 12, color: '#6B7280', marginTop: 2 },
-  itemPrice: { fontSize: 14, fontWeight: '600', color: '#111827' },
+  itemMeta: { fontSize: 12, color: '#6B7280' },
+  categoryBtn: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    marginTop: 2,
+  },
+  categoryBtnText: { fontSize: 11, color: '#9CA3AF' },
+  categoryBtnActive: { color: '#3B82F6', fontWeight: '600' },
+  itemPrice: { fontSize: 14, fontWeight: '600', color: '#111827', marginTop: 2 },
   discountPrice: { color: '#10B981' },
   totalRow: {
     flexDirection: 'row',

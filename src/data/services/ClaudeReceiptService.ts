@@ -11,10 +11,10 @@ const SYSTEM_PROMPT = [
   'Required format:',
   '{"storeName":"string","totalAmount":0.00,"items":[{"rawName":"string","normalizedName":"string","quantity":1,"unitPrice":0.00,"totalPrice":0.00,"isDiscount":false}]}',
   'Rules:',
+  '- rawName and normalizedName must be the EXACT text from the receipt. Do NOT translate, normalize or change the name in any way.',
   '- Ignore lines like tax, total, cash given, change, receipt number',
   '- Discounts/deposits as separate items with isDiscount:true',
   '- Extract quantity from "3x" or "3 Stk"',
-  '- normalizedName: readable name without size info like 500ml or 1kg',
 ].join('\n');
 
 function extractJson(text: string): ParsedReceipt {
