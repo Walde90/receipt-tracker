@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SettingsNavigator } from './SettingsNavigator';
+import { BudgetNavigator } from './BudgetNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,9 +31,11 @@ export function RootNavigator() {
         <Tab.Screen name="Receipts" options={{ title: 'Belege', tabBarLabel: 'Belege' }}>
           {() => <PlaceholderScreen name="Belege" />}
         </Tab.Screen>
-        <Tab.Screen name="Budget" options={{ title: 'Budget', tabBarLabel: 'Budget' }}>
-          {() => <PlaceholderScreen name="Budget" />}
-        </Tab.Screen>
+        <Tab.Screen
+          name="Budget"
+          options={{ title: 'Budget', tabBarLabel: 'Budget' }}
+          component={BudgetNavigator}
+        />
         <Tab.Screen name="Reports" options={{ title: 'Auswertungen', tabBarLabel: 'Auswertungen' }}>
           {() => <PlaceholderScreen name="Auswertungen" />}
         </Tab.Screen>
