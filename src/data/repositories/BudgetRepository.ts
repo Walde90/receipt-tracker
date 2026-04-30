@@ -34,9 +34,11 @@ export class BudgetRepository implements IBudgetRepository {
   }
 
   async update(id: number, data: Partial<Omit<BudgetEntry, 'id'>>): Promise<BudgetEntry> {
+    const { createdAt, ...rest } = data;
+    const dbData = createdAt ? { ...rest, createdAt: createdAt.toISOString() } : rest;
     const result = await db
       .update(budgetEntries)
-      .set(data)
+      .set(dbData)
       .where(eq(budgetEntries.id, id))
       .returning();
     return toEntity(result[0]);
