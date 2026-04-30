@@ -20,7 +20,9 @@ export const receipts = sqliteTable('receipts', {
 
 export const lineItems = sqliteTable('line_items', {
   id: int('id').primaryKey({ autoIncrement: true }),
-  receiptId: int('receipt_id').notNull().references(() => receipts.id),
+  receiptId: int('receipt_id')
+    .notNull()
+    .references(() => receipts.id),
   rawName: text('raw_name').notNull(),
   normalizedName: text('normalized_name').notNull(),
   quantity: real('quantity').notNull().default(1),
@@ -30,17 +32,27 @@ export const lineItems = sqliteTable('line_items', {
   createdAt: text('created_at').notNull(),
 });
 
-export const lineItemCategories = sqliteTable('line_item_categories', {
-  lineItemId: int('line_item_id').notNull().references(() => lineItems.id),
-  categoryId: int('category_id').notNull().references(() => categories.id),
-}, (table) => ({
-  pk: primaryKey({ columns: [table.lineItemId, table.categoryId] }),
-}));
+export const lineItemCategories = sqliteTable(
+  'line_item_categories',
+  {
+    lineItemId: int('line_item_id')
+      .notNull()
+      .references(() => lineItems.id),
+    categoryId: int('category_id')
+      .notNull()
+      .references(() => categories.id),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.lineItemId, table.categoryId] }),
+  })
+);
 
 export const fuzzyAliases = sqliteTable('fuzzy_aliases', {
   id: int('id').primaryKey({ autoIncrement: true }),
   rawPattern: text('raw_pattern').notNull(),
-  categoryId: int('category_id').notNull().references(() => categories.id),
+  categoryId: int('category_id')
+    .notNull()
+    .references(() => categories.id),
   confidence: real('confidence').notNull().default(1.0),
   hitCount: int('hit_count').notNull().default(1),
   createdAt: text('created_at').notNull(),
@@ -54,7 +66,9 @@ export const budgetEntries = sqliteTable('budget_entries', {
   amount: real('amount').notNull(),
   categoryId: int('category_id').references(() => categories.id),
   isConfirmed: int('is_confirmed', { mode: 'boolean' }).notNull().default(false),
-  confirmationSource: text('confirmation_source', { enum: ['receipt', 'bank_import', 'manual_confirm'] }),
+  confirmationSource: text('confirmation_source', {
+    enum: ['receipt', 'bank_import', 'manual_confirm'],
+  }),
   recurrence: text('recurrence', { enum: ['monthly', 'once'] }),
   createdAt: text('created_at').notNull(),
 });

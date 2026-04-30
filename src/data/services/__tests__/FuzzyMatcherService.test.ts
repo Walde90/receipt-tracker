@@ -92,10 +92,7 @@ describe('FuzzyMatcherService', () => {
     });
 
     it('picks the best match when multiple aliases exist', () => {
-      service.load([
-        makeAlias(1, 'coca cola', 1),
-        makeAlias(2, 'pepsi cola', 2),
-      ]);
+      service.load([makeAlias(1, 'coca cola', 1), makeAlias(2, 'pepsi cola', 2)]);
       const result = service.suggest('coca cola');
       expect(result!.categoryId).toBe(1);
     });
