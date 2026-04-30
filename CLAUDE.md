@@ -53,10 +53,10 @@ src/
 - Feature-Branches: `feature/category-management`, `feature/ocr-scanner`, etc.
 - Kein direktes Pushen auf `main` für Features
 
-## Meilensteine (aktueller Stand: Milestone 1 abgeschlossen)
+## Meilensteine (aktueller Stand: Milestone 2 abgeschlossen)
 1. ✅ Projekt-Setup, Datenbankschema, Navigation-Skeleton
 2. ✅ Kategorienverwaltung (Baum-CRUD) — branch: feature/category-management
-3. ⬜ Budget-Eingabe + Suspicious-Flag
+3. ✅ Budget-Eingabe + Suspicious-Flag — branch: feature/budget-management (PR #2)
 4. ⬜ Kamera + OCR Pipeline
 5. ⬜ Kategorisierung + Fuzzy Matching
 6. ⬜ Monatsberichte + Charts

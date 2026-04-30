@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SettingsNavigator } from './SettingsNavigator';
 import { BudgetNavigator } from './BudgetNavigator';
+import { ReceiptsNavigator } from './ReceiptsNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,9 +29,11 @@ export function RootNavigator() {
         <Tab.Screen name="Dashboard" options={{ title: 'Dashboard', tabBarLabel: 'Dashboard' }}>
           {() => <PlaceholderScreen name="Dashboard" />}
         </Tab.Screen>
-        <Tab.Screen name="Receipts" options={{ title: 'Belege', tabBarLabel: 'Belege' }}>
-          {() => <PlaceholderScreen name="Belege" />}
-        </Tab.Screen>
+        <Tab.Screen
+          name="Receipts"
+          options={{ title: 'Belege', tabBarLabel: 'Belege' }}
+          component={ReceiptsNavigator}
+        />
         <Tab.Screen
           name="Budget"
           options={{ title: 'Budget', tabBarLabel: 'Budget' }}
