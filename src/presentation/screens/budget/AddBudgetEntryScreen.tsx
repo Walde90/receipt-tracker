@@ -10,7 +10,7 @@ import {
   Switch,
 } from 'react-native';
 import { useBudgetStore } from '../../stores/budgetStore';
-import { BudgetEntryType, Recurrence } from '../../../domain/entities/Budget';
+import { BudgetEntryType } from '../../../domain/entities/Budget';
 
 type Props = { navigation: any };
 

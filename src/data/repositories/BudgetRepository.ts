@@ -1,4 +1,4 @@
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '../db/database';
 import { budgetEntries } from '../db/schema';
 import { BudgetEntry, MonthlyReport } from '../../domain/entities/Budget';

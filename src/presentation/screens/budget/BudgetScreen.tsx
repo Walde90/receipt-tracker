@@ -38,7 +38,7 @@ function formatAmount(amount: number): string {
 type Props = { navigation: any };
 
 export function BudgetScreen({ navigation }: Props) {
-  const { entries, report, selectedMonth, isLoading, error, load, remove, confirm, setMonth } =
+  const { entries, report, selectedMonth, isLoading, load, remove, confirm, setMonth } =
     useBudgetStore();
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { BudgetScreen } from '../screens/budget/BudgetScreen';
 import { AddBudgetEntryScreen } from '../screens/budget/AddBudgetEntryScreen';
 
