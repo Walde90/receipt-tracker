@@ -29,7 +29,7 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
         repository.getTree(),
       ]);
       set({ categories, tree, isLoading: false });
-    } catch (e) {
+    } catch {
       set({ error: 'Kategorien konnten nicht geladen werden.', isLoading: false });
     }
   },

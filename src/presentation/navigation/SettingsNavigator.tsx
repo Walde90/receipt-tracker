@@ -1,5 +1,6 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CategoryManagerScreen } from '../screens/settings/CategoryManagerScreen';
 import { AddEditCategoryScreen } from '../screens/settings/AddEditCategoryScreen';
 
@@ -11,10 +12,13 @@ export type SettingsStackParams = {
 
 const Stack = createStackNavigator<SettingsStackParams>();
 
-function SettingsHomeScreen({ navigation }: any) {
-  const { View, Text, TouchableOpacity, StyleSheet } = require('react-native');
+type SettingsHomeProps = {
+  navigation: StackNavigationProp<SettingsStackParams, 'SettingsHome'>;
+};
+
+function SettingsHomeScreen({ navigation }: SettingsHomeProps) {
   return (
-    <View style={{ flex: 1, backgroundColor: '#F9FAFB', padding: 16 }}>
+    <View style={styles.container}>
       <TouchableOpacity
         style={styles.menuItem}
         onPress={() => navigation.navigate('CategoryManager')}
@@ -25,7 +29,8 @@ function SettingsHomeScreen({ navigation }: any) {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#F9FAFB', padding: 16 },
   menuItem: {
     backgroundColor: '#fff',
     padding: 16,
@@ -35,14 +40,33 @@ const styles = {
     borderColor: '#E5E7EB',
   },
   menuText: { fontSize: 15, color: '#111827' },
-};
+});
 
 export function SettingsNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#fff' }, headerTitleStyle: { fontWeight: '600' } }}>
-      <Stack.Screen name="SettingsHome" component={SettingsHomeScreen} options={{ title: 'Einstellungen' }} />
-      <Stack.Screen name="CategoryManager" component={CategoryManagerScreen} options={{ title: 'Kategorien' }} />
-      <Stack.Screen name="AddEditCategory" component={AddEditCategoryScreen} options={({ route }) => ({ title: route.params.categoryId ? 'Kategorie bearbeiten' : 'Neue Kategorie' })} />
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: '#fff' },
+        headerTitleStyle: { fontWeight: '600' },
+      }}
+    >
+      <Stack.Screen
+        name="SettingsHome"
+        component={SettingsHomeScreen}
+        options={{ title: 'Einstellungen' }}
+      />
+      <Stack.Screen
+        name="CategoryManager"
+        component={CategoryManagerScreen}
+        options={{ title: 'Kategorien' }}
+      />
+      <Stack.Screen
+        name="AddEditCategory"
+        component={AddEditCategoryScreen}
+        options={({ route }) => ({
+          title: route.params.categoryId ? 'Kategorie bearbeiten' : 'Neue Kategorie',
+        })}
+      />
     </Stack.Navigator>
   );
 }
