@@ -73,10 +73,7 @@ describe('buildTree (CategoryRepository logic)', () => {
   });
 
   it('orphaned children (unknown parentId) are not added to roots', () => {
-    const flat = [
-      makeCategory(1, 'Lebensmittel'),
-      makeCategory(2, 'Getränke', 99),
-    ];
+    const flat = [makeCategory(1, 'Lebensmittel'), makeCategory(2, 'Getränke', 99)];
     const tree = buildTree(flat);
     expect(tree).toHaveLength(1);
     expect(tree[0].children).toHaveLength(0);

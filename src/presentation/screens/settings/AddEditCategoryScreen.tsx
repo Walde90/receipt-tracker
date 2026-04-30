@@ -12,8 +12,14 @@ import { useCategoryStore } from '../../stores/categoryStore';
 import { DEFAULT_CATEGORY_COLOR, DEFAULT_CATEGORY_ICON } from '../../../shared/constants';
 
 const COLORS = [
-  '#10B981', '#3B82F6', '#F59E0B', '#EF4444',
-  '#8B5CF6', '#EC4899', '#6B7280', '#14B8A6',
+  '#10B981',
+  '#3B82F6',
+  '#F59E0B',
+  '#EF4444',
+  '#8B5CF6',
+  '#EC4899',
+  '#6B7280',
+  '#14B8A6',
 ];
 
 type Props = {
@@ -80,7 +86,11 @@ export function AddEditCategoryScreen({ navigation, route }: Props) {
         {COLORS.map((c) => (
           <TouchableOpacity
             key={c}
-            style={[styles.colorOption, { backgroundColor: c }, color === c && styles.colorSelected]}
+            style={[
+              styles.colorOption,
+              { backgroundColor: c },
+              color === c && styles.colorSelected,
+            ]}
             onPress={() => setColor(c)}
           />
         ))}

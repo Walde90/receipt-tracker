@@ -65,9 +65,7 @@ const DEFAULT_CATEGORIES: SeedCategory[] = [
 ];
 
 export function seedDefaultCategories(): void {
-  const count = sqlite.getFirstSync<{ count: number }>(
-    'SELECT COUNT(*) as count FROM categories'
-  );
+  const count = sqlite.getFirstSync<{ count: number }>('SELECT COUNT(*) as count FROM categories');
 
   if (count && count.count > 0) return;
 
@@ -76,7 +74,10 @@ export function seedDefaultCategories(): void {
   for (const cat of DEFAULT_CATEGORIES) {
     const parent = sqlite.runSync(
       'INSERT INTO categories (name, parent_id, color, icon, sort_order) VALUES (?, NULL, ?, ?, ?)',
-      cat.name, cat.color, cat.icon, sortOrder++
+      cat.name,
+      cat.color,
+      cat.icon,
+      sortOrder++
     );
 
     const parentId = parent.lastInsertRowId;
@@ -84,7 +85,11 @@ export function seedDefaultCategories(): void {
     for (const child of cat.children ?? []) {
       sqlite.runSync(
         'INSERT INTO categories (name, parent_id, color, icon, sort_order) VALUES (?, ?, ?, ?, ?)',
-        child.name, parentId, child.color, child.icon, sortOrder++
+        child.name,
+        parentId,
+        child.color,
+        child.icon,
+        sortOrder++
       );
     }
   }

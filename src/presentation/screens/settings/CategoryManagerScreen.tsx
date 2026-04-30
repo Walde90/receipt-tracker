@@ -62,12 +62,7 @@ export function CategoryManagerScreen({ navigation }: Props) {
         data={tree}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }: { item: CategoryTree }) => (
-          <CategoryTreeItem
-            node={item}
-            depth={0}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          <CategoryTreeItem node={item} depth={0} onEdit={handleEdit} onDelete={handleDelete} />
         )}
         ListEmptyComponent={
           <View style={styles.center}>

@@ -22,9 +22,7 @@ export function CategoryTreeItem({ node, depth, onEdit, onDelete }: Props) {
           onPress={() => hasChildren && setExpanded((v) => !v)}
         >
           <Text style={styles.name}>{node.name}</Text>
-          {hasChildren && (
-            <Text style={styles.chevron}>{expanded ? '▾' : '▸'}</Text>
-          )}
+          {hasChildren && <Text style={styles.chevron}>{expanded ? '▾' : '▸'}</Text>}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onEdit(node.id)} style={styles.action}>
           <Text style={styles.actionText}>✏️</Text>

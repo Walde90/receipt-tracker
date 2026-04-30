@@ -2,7 +2,7 @@ import Fuse from 'fuse.js';
 import { FuzzyAlias, CategorySuggestion } from '../../domain/entities/FuzzyAlias';
 
 const AUTO_APPLY_THRESHOLD = 0.85;
-const SUGGEST_THRESHOLD = 0.70;
+const SUGGEST_THRESHOLD = 0.7;
 const SIZE_SUFFIX_PATTERN = /\s+\d+(\.\d+)?\s*(ml|l|g|kg|cl|stk|pcs|x)?$/i;
 
 export class FuzzyMatcherService {

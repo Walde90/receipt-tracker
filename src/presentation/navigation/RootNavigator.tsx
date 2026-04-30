@@ -36,7 +36,11 @@ export function RootNavigator() {
         <Tab.Screen name="Reports" options={{ title: 'Auswertungen', tabBarLabel: 'Auswertungen' }}>
           {() => <PlaceholderScreen name="Auswertungen" />}
         </Tab.Screen>
-        <Tab.Screen name="Settings" options={{ title: 'Einstellungen', tabBarLabel: 'Einstellungen' }} component={SettingsNavigator} />
+        <Tab.Screen
+          name="Settings"
+          options={{ title: 'Einstellungen', tabBarLabel: 'Einstellungen' }}
+          component={SettingsNavigator}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

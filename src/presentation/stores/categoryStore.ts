@@ -24,10 +24,7 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
   load: async () => {
     set({ isLoading: true, error: null });
     try {
-      const [categories, tree] = await Promise.all([
-        repository.getAll(),
-        repository.getTree(),
-      ]);
+      const [categories, tree] = await Promise.all([repository.getAll(), repository.getTree()]);
       set({ categories, tree, isLoading: false });
     } catch {
       set({ error: 'Kategorien konnten nicht geladen werden.', isLoading: false });
@@ -36,28 +33,19 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
 
   create: async (category) => {
     await repository.create(category);
-    const [categories, tree] = await Promise.all([
-      repository.getAll(),
-      repository.getTree(),
-    ]);
+    const [categories, tree] = await Promise.all([repository.getAll(), repository.getTree()]);
     set({ categories, tree });
   },
 
   update: async (id, data) => {
     await repository.update(id, data);
-    const [categories, tree] = await Promise.all([
-      repository.getAll(),
-      repository.getTree(),
-    ]);
+    const [categories, tree] = await Promise.all([repository.getAll(), repository.getTree()]);
     set({ categories, tree });
   },
 
   remove: async (id) => {
     await repository.delete(id);
-    const [categories, tree] = await Promise.all([
-      repository.getAll(),
-      repository.getTree(),
-    ]);
+    const [categories, tree] = await Promise.all([repository.getAll(), repository.getTree()]);
     set({ categories, tree });
   },
 }));
