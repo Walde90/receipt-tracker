@@ -1,14 +1,15 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SettingsNavigator } from './SettingsNavigator';
 
 const Tab = createBottomTabNavigator();
 
 function PlaceholderScreen({ name }: { name: string }) {
-  const { View, Text } = require('react-native');
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>{name}</Text>
+      <Text style={{ fontSize: 16, color: '#6B7280' }}>{name}</Text>
     </View>
   );
 }
@@ -16,12 +17,26 @@ function PlaceholderScreen({ name }: { name: string }) {
 export function RootNavigator() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Dashboard" children={() => <PlaceholderScreen name="Dashboard" />} />
-        <Tab.Screen name="Receipts" children={() => <PlaceholderScreen name="Belege" />} />
-        <Tab.Screen name="Budget" children={() => <PlaceholderScreen name="Budget" />} />
-        <Tab.Screen name="Reports" children={() => <PlaceholderScreen name="Auswertungen" />} />
-        <Tab.Screen name="Settings" children={() => <PlaceholderScreen name="Einstellungen" />} />
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: '#3B82F6',
+          tabBarInactiveTintColor: '#6B7280',
+        }}
+      >
+        <Tab.Screen name="Dashboard" options={{ title: 'Dashboard', tabBarLabel: 'Dashboard' }}>
+          {() => <PlaceholderScreen name="Dashboard" />}
+        </Tab.Screen>
+        <Tab.Screen name="Receipts" options={{ title: 'Belege', tabBarLabel: 'Belege' }}>
+          {() => <PlaceholderScreen name="Belege" />}
+        </Tab.Screen>
+        <Tab.Screen name="Budget" options={{ title: 'Budget', tabBarLabel: 'Budget' }}>
+          {() => <PlaceholderScreen name="Budget" />}
+        </Tab.Screen>
+        <Tab.Screen name="Reports" options={{ title: 'Auswertungen', tabBarLabel: 'Auswertungen' }}>
+          {() => <PlaceholderScreen name="Auswertungen" />}
+        </Tab.Screen>
+        <Tab.Screen name="Settings" options={{ title: 'Einstellungen', tabBarLabel: 'Einstellungen' }} component={SettingsNavigator} />
       </Tab.Navigator>
     </NavigationContainer>
   );
